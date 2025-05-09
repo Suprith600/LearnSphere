@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>View Courses | LearnSphere</title>
+  <style>
+body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      flex-direction: column;
+    }
+
+    .topnav {
+      width: 100%;
+      background-color: #667eea;
+      overflow: hidden;
+      box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
+      position: fixed;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .topnav a {
+      float: left;
+      color: #fff;
+      text-align: center;
+      padding: 16px 20px;
+      text-decoration: none;
+      font-size: 1rem;
+      font-weight: 500;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    .topnav a.logout {
+      float: right;
+      background-color: #e53e3e;
+    }
+
+    .topnav a.logout:hover {
+      background-color: #c53030;
+    }
+
+    .topnav a:hover {
+      background-color: #5563c1;
+      color: #ffffff;
+    }
+
+    .topnav a.active {
+      background-color: #04AA6D;
+      color: #ffffff;
+    }
+
+    /* Container for the course list */
+    .content-container {
+      padding: 40px;
+      width: 80%;
+      margin: auto;
+      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 30px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+    }
+
+    th, td {
+      padding: 12px;
+      text-align: left;
+      border: 1px solid #ddd;
+    }
+
+    th {
+      background-color: #4a5568;
+    }
+
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: #f9f9f9;
+      min-width: 160px;
+      box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+      z-index: 1;
+    }
+
+    .dropdown-content button {
+      color: black;
+      padding: 12px 16px;
+      text-decoration: none;
+      display: block;
+      background-color: white;
+      border: none;
+      text-align: left;
+    }
+
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
+
+    .dropdown-content button:hover {
+      background-color: #ddd;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top navigation bar -->
+  <div class="topnav">
+    <a class="active" href="/trainerHome">Home</a>
+    <a href="/createCourse">Create Course</a>
+    <a href="/addLesson">Add Lesson</a>
+    <a href="/showCourses">View Courses</a>
+     <a href="/login" class="logout">Logout</a>
+  </div>
+
+  <!-- Content container for courses -->
+  <div class="content-container">
+    <h1>Courses Details</h1>
+
+    <table>
+      <tr>
+        <th>Course ID</th>
+        <th>Course Name</th>
+        <th>Course Price</th>
+        <th>Lessons</th>
+      </tr>
+      <tr th:each="course:${courseLessonMap}">
+        <td th:text="${course.key.courseId}"></td>
+        <td th:text="${course.key.courseName}"></td>
+        <td th:text="${course.key.coursePrice}"></td>
+        <td>
+          <div class="dropdown">
+            <button class="dropbtn">Lessons</button>
+            <div class="dropdown-content">
+              <form th:each="lesson : ${course.value}" th:action="@{/getLesson}" method="post">
+                <input type="hidden" name="lessonId" th:value="${lesson.lessonId}" />
+                <button type="submit" class="dropdown-link" th:text="${lesson.lessonName}"></button>
+              </form>
+            </div>
+          </div>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Lesson</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      padding: 20px;
+    }
+    h1 {
+      color: #333;
+      text-align: center;
+    }
+    .container {
+      background-color: #ffffff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      margin-top: 20px;
+    }
+    label {
+      font-weight: bold;
+    }
+    iframe {
+      margin-top: 15px;
+      border-radius: 8px;
+    }
+    .comment-section {
+      margin-top: 30px;
+    }
+    .comment-box {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+    .comment-box textarea {
+      width: 100%;
+      height: 100px;
+      resize: none;
+      border-radius: 8px;
+      padding: 10px;
+      font-size: 1rem;
+    }
+    .comment-box input[type="submit"] {
+      background-color: #667eea;
+      color: #fff;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+    .comment-box input[type="submit"]:hover {
+      background-color: #5563c1;
+    }
+    .comments-list {
+      margin-top: 20px;
+    }
+    .comment-item {
+      background-color: #f9f9f9;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+  </style>
+</head>
+<body>
+
+  <h1>My Lesson</h1><br>
+
+  <label>Course Id : </label><label th:text="${lesson.course.courseId}"></label><br><br>
+  <label>Lesson Id : </label><label th:text="${lesson.lessonId}"></label><br><br>
+  <label>Lesson Name : </label><label th:text="${lesson.lessonName}"></label><br><br>
+  <label>Topics : </label><label th:text="${lesson.topics}"></label><br><br>
+  <label>Link : </label><br>
+  <iframe width="560" height="315" th:src="${lesson.link}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe><br><br>
+  <div class="container">
+    <h2>Leave a comment here:</h2>
+    <form action="/addComment" method="post">
+      <div class="comment-box">
+        <textarea name="comment" placeholder="Write your comment here..."></textarea>
+        <input type="submit" value="Add Comment">
+      </div>
+    </form>
+  </div>
+
+  <div class="container comment-section">
+    <h2>Comments</h2>
+    <div class="comments-list">
+      <div th:each="comments : ${list}" class="comment-item">
+        <p th:text="${comments.comment}"></p>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

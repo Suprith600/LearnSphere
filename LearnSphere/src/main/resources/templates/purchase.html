@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Buy Courses</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <style>
+    /* Top Navigation Bar Styles */
+    .topnav {
+      width: 100%;
+      background-color: #667eea;
+      overflow: hidden;
+      box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
+      position: fixed;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .topnav a {
+      float: left;
+      color: #fff;
+      text-align: center;
+      padding: 16px 20px;
+      text-decoration: none;
+      font-size: 1rem;
+      font-weight: 500;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    .topnav a.logout {
+      float: right;
+      background-color: #e53e3e;
+    }
+
+    .topnav a.logout:hover {
+      background-color: #c53030;
+    }
+
+    .topnav a:hover {
+      background-color: #5563c1;
+      color: #ffffff;
+    }
+
+    .topnav a.active {
+      background-color: #04AA6D;
+      color: #ffffff;
+    }
+
+    /* Page Content */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      color: white;
+      padding-top: 60px; /* To avoid overlap with the fixed navbar */
+    }
+
+    /* Container Styles */
+    .container {
+      background-color: #ffffff;
+      padding: 40px;
+      border-radius: 24px;
+      box-shadow: 0px 15px 40px rgba(0, 0, 0, 0.1);
+      width: 420px;
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      margin-top: 20px; /* Additional space from the top */
+    }
+
+    .container:hover {
+      transform: translateY(-5px);
+      box-shadow: 0px 20px 50px rgba(0, 0, 0, 0.3);
+    }
+
+    .container h1 {
+      font-size: 2rem;
+      color: #333333;
+      margin-bottom: 24px;
+      font-weight: 600;
+    }
+
+    /* Table Styling */
+    .container table {
+      width: 100%;
+      margin-top: 20px;
+      border-collapse: collapse;
+      background-color: #f9f9f9; /* Make sure the table stands out */
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .container th, .container td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+      color: #333;
+    }
+
+    .container th {
+      background-color: #667eea;
+      color: #fff;
+    }
+
+    .container button {
+      padding: 12px;
+      background-color: #667eea;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .container button:hover {
+      background-color: #5563c1;
+      transform: scale(1.02);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <div class="topnav">
+    <a class="active" href="/studentHome">Home</a>
+    <a href="/buyCourses">Buy Courses</a>
+    <a href="/showMyCourses">My Courses</a>
+    <a class="logout" href="/login">Logout</a>
+  </div>
+
+  <!-- Main Content -->
+  <div class="container">
+    <h1>Buy Courses</h1>
+    <table>
+      <tr>
+        <th>Course Name</th>
+        <th>Course Price</th>
+        <th>Lessons</th>
+        <th>Action</th>
+      </tr>
+      <tr th:each="course:${list}">
+        <td th:text="${course.CourseName}"></td>
+        <td th:text="${course.CoursePrice}"></td>
+        <td>
+          <ul>
+            <li th:each="lesson : ${course.lessons}" th:text="${lesson.lessonName}"></li>
+          </ul>
+        </td>
+        <td>
+          <form class="payment-form" method="post">
+            <input type="hidden" name="CoursePrice" class="course-price" th:value="${course.CoursePrice}" />
+            <button type="submit">Buy Course</button>
+          </form>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <script>
+    $(document).ready(function () {
+      $(".payment-form").on("submit", function (e) {
+        e.preventDefault();
+
+        var form = $(this);  // The specific form being submitted
+        var amount = form.find(".course-price").val();
+
+        if (!amount || isNaN(amount)) {
+          alert("Please enter a valid amount");
+          return;
+        }
+
+        $.post("/createOrder", { CoursePrice: amount })
+          .done(function (order) {
+            order = JSON.parse(order);
+
+            var options = {
+              "key": "rzp_test_4mYkj9F3mXrOL0",
+              "amount": order.amount,
+              "currency": "INR",
+              "name": "LearnSphere",
+              "description": "Course Payment",
+              "image": "https://example.com/your_logo",
+              "order_id": order.id,
+              "handler": function (response) {
+                alert("Payment ID: " + response.razorpay_payment_id);
+                alert("Order ID: " + response.razorpay_order_id);
+                alert("Signature: " + response.razorpay_signature);
+              },
+              "prefill": {
+                "name": "Gaurav Kumar",
+                "email": "gaurav.kumar@example.com",
+                "contact": "9000090000"
+              },
+              "notes": {
+                "address": "Razorpay Corporate Office"
+              },
+              "theme": {
+                "color": "#3399cc"
+              }
+            };
+
+            var rzp1 = new Razorpay(options);
+            rzp1.on('payment.failed', function (response) {
+              alert("Payment Failed");
+              alert(response.error.description);
+            });
+
+            rzp1.open();
+          })
+          .fail(function (xhr) {
+            alert("Error: " + xhr.responseText);
+          });
+      });
+    });
+  </script>
+
+</body>
+</html>

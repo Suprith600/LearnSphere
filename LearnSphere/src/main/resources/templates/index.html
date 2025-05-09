@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LearnSphere | Home</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background-color: #ffffff;
+      border-radius: 24px;
+      padding: 50px;
+      box-shadow: 0px 15px 40px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      width: 420px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .container:hover {
+      transform: translateY(-5px);
+      box-shadow: 0px 20px 50px rgba(0, 0, 0, 0.3);
+    }
+
+    .container h1 {
+      font-size: 2.8rem;
+      color: #333333;
+      margin-bottom: 16px;
+      font-weight: 600;
+    }
+
+    .container p {
+      font-size: 1rem;
+      color: #555555;
+      margin-bottom: 40px;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+    }
+
+    .btn-group a {
+      text-decoration: none;
+      color: #ffffff;
+      background-color: #667eea;
+      padding: 12px 30px;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 500;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .btn-group a:hover {
+      background-color: #5563c1;
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Welcome to LearnSphere</h1>
+    <p>Your gateway to effective online learning</p>
+    <div class="btn-group">
+      <a href="/login">Login</a>
+      <a href="/register">Register</a>
+    </div>
+  </div>
+
+</body>
+</html>

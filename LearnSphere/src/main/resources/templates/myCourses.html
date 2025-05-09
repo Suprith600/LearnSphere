@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Courses</title>
+  <style>
+    /* Top Navigation Bar */
+    .topnav {
+      width: 100%;
+      background-color: #667eea;
+      overflow: hidden;
+      box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
+      position: fixed;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .topnav a {
+      float: left;
+      color: #fff;
+      text-align: center;
+      padding: 16px 20px;
+      text-decoration: none;
+      font-size: 1rem;
+      font-weight: 500;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    .topnav a.logout {
+      float: right;
+      background-color: #e53e3e;
+    }
+
+    .topnav a.logout:hover {
+      background-color: #c53030;
+    }
+
+    .topnav a:hover {
+      background-color: #5563c1;
+      color: #ffffff;
+    }
+
+    .topnav a.active {
+      background-color: #04AA6D;
+      color: #ffffff;
+    }
+
+    /* Dropdown Styles */
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+
+    .dropdown button {
+      background-color: #667eea;
+      color: white;
+      padding: 10px;
+      font-size: 16px;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    .dropdown button:hover {
+      background-color: #5563c1;
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: #f9f9f9;
+      min-width: 160px;
+      box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+      z-index: 1;
+      border-radius: 5px;
+      padding: 5px;
+    }
+
+    .dropdown-content a {
+      color: black;
+      padding: 12px 16px;
+      text-decoration: none;
+      display: block;
+      border-radius: 3px;
+    }
+
+    .dropdown-content a:hover {
+      background-color: #ddd;
+    }
+
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
+
+    /* Table Styling */
+    table {
+      width: 100%;
+      margin-top: 20px;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 12px;
+      border: 1px solid #ddd;
+      text-align: left;
+    }
+
+    th {
+      background-color: #667eea;
+      color: white;
+    }
+
+    /* Page Styling */
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f4f4f4;
+      padding: 20px;
+    }
+
+    h1 {
+      color: #333;
+    }
+  </style>
+  <script>
+    // Function to toggle the dropdown visibility
+    function toggleDropdown(button) {
+      var content = button.nextElementSibling;
+      content.style.display = content.style.display === 'block' ? 'none' : 'block';
+    }
+  </script>
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+  <div class="topnav">
+    <a href="/studentHome" class="active">Home</a>
+    <a href="/buyCourses">Buy Courses</a>
+    <a href="/showMyCourses">My Courses</a>
+    <a href="/login" class="logout">Logout</a>
+  </div>
+
+  <!-- My Courses Page Content -->
+  <h1>My Courses</h1>
+  <table>
+    <tr>
+      <th>Course ID</th>
+      <th>Course Name</th>
+      <th>Course Price</th>
+      <th>Lessons</th>
+    </tr>
+    <tr th:each="course:${courseLessonMap}">
+      <td th:text="${course.key.courseId}"></td>
+      <td th:text="${course.key.courseName}"></td>
+      <td th:text="${course.key.coursePrice}"></td>
+      <td>
+        <!-- Dropdown for Lessons -->
+        <div class="dropdown">
+          <button onclick="toggleDropdown(this)" class="dropbtn">Lessons</button>
+          <div class="dropdown-content" style="display: none;">
+            <form th:each="lesson : ${course.value}" th:action="@{/getLesson}" method="post">
+              <input type="hidden" name="lessonId" th:value="${lesson.lessonId}" />
+              <button type="submit" class="dropdown-link" th:text="${lesson.lessonName}"></button>
+            </form>
+          </div>
+        </div>
+      </td>
+    </tr>
+  </table>
+
+</body>
+</html>
